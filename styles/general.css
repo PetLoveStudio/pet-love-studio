@@ -25,6 +25,16 @@ a {
     color: white;
 }
 
+/* Hero Section */
+.hero2 {
+    position: relative;
+    height: 100vh; /* full viewport height */
+    background-image: url('../images/Screenshot\ 2025-08-28\ 023340.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
 .hero::before {
     content: "";
     position: absolute;
@@ -84,5 +94,13 @@ a {
 .btn-orange:hover {
     background-color: darkorange;
     color: white;
+}
+
+/* Footer styling */
+.custom-footer {
+    background-color: #efb22e; /* Same orange as navbar */
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
