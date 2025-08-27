@@ -1,0 +1,88 @@
+/* Global Styles */
+body, p, div {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Navbar */
+.custom-navbar {
+    background-color: orange;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 100vh; /* full viewport height */
+    background-image: url('../images/unnamed.webp');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* semi-transparent overlay */
+}
+
+.hero-content {
+    position: relative; /* keep content above overlay */
+    z-index: 1;
+    padding: 0 20px;
+    animation: fadeInPop 1s ease-out forwards;
+}
+
+.hero-content h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: 0.5rem;
+}
+
+.hero-content p {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    opacity: 0; /* prevent flash before animation */
+    animation: fadeInPop 1.2s ease-out forwards;
+    animation-delay: 0.3s;
+}
+
+/* Fade + pop animation */
+@keyframes fadeInPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
+
+.btn-orange {
+    background-color: orange;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-orange:hover {
+    background-color: darkorange;
+    color: white;
+}
+
