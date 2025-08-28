@@ -28,11 +28,25 @@ a {
 /* Hero Section */
 .hero2 {
     position: relative;
-    height: 500px; /* full viewport height */
+    height: 500px;
     background-image: url('../images/grooming.jpg');
-    background-size:contain;
+    background-size: contain;
+    background-repeat: no-repeat; /* add this so it doesn’t repeat */
     background-position: center 30%;
     color: white;
+}
+
+/* On smaller screens */
+@media (max-width: 768px) {
+    .hero2 {
+        height: 300px; /* shorter height for tablets & mobiles */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero2 {
+        height: 200px; /* even shorter for small phones */
+    }
 }
 
 /* Hero Section */
@@ -45,6 +59,20 @@ a {
     color: white;
 }
 
+/* On smaller screens */
+@media (max-width: 768px) {
+    .hero3 {
+        height: 300px; /* shorter height for tablets & mobiles */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero3 {
+        height: 200px; /* even shorter for small phones */
+    }
+}
+
+
 /* Hero Section */
 .hero4 {
     position: relative;
@@ -53,6 +81,19 @@ a {
     background-size: contain;
     background-position: center;
     color: white;
+}
+
+/* On smaller screens */
+@media (max-width: 768px) {
+    .hero4 {
+        height: 300px; /* shorter height for tablets & mobiles */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero4 {
+        height: 200px; /* even shorter for small phones */
+    }
 }
 
 
@@ -129,7 +170,4 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
-
-
-
 
