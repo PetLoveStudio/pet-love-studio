@@ -39,13 +39,13 @@ a {
 /* On smaller screens */
 @media (max-width: 768px) {
     .hero2 {
-        height: 150px; /* shorter height for tablets & mobiles */
+        height: 190px; /* shorter height for tablets & mobiles */
     }
 }
 
 @media (max-width: 480px) {
     .hero2 {
-        height: 140px; /* even shorter for small phones */
+        height: 180px; /* even shorter for small phones */
     }
 }
 
@@ -170,6 +170,7 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
 
 
 
