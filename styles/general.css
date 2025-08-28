@@ -30,7 +30,7 @@ a {
     position: relative;
     height: 150vh; /* full viewport height */
     background-image: url('../images/grooming.jpg');
-    background-size: cover;
+    background-size:contain;
     background-position: center 30%;
     color: white;
 }
@@ -40,7 +40,7 @@ a {
     position: relative;
     height: 100vh; /* full viewport height */
     background-image: url('../images/ILOVEPETLOVESTIDIO.jpg');
-    background-size: fill;
+    background-size: contain;
     background-position: center;
     color: white;
 }
@@ -50,7 +50,7 @@ a {
     position: relative;
     height: 120vh; /* full viewport height */
     background-image: url('../images/ABOUT.jpg');
-    background-size: fill;
+    background-size: contain;
     background-position: center;
     color: white;
 }
