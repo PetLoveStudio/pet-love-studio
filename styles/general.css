@@ -28,9 +28,9 @@ a {
 /* Hero Section */
 .hero2 {
     position: relative;
-    height: 500px;
+    height: 100vh;
     background-image: url('../images/grooming.jpg');
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat; /* add this so it doesn’t repeat */
     background-position: center 30%;
     color: white;
@@ -170,6 +170,7 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
 
 
 
