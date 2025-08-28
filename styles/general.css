@@ -28,7 +28,7 @@ a {
 /* Hero Section */
 .hero2 {
     position: relative;
-    height: 80vh; /* full viewport height */
+    height: 500px; /* full viewport height */
     background-image: url('../images/grooming.jpg');
     background-size:contain;
     background-position: center 30%;
@@ -129,6 +129,7 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
 
 
 
