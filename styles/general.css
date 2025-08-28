@@ -52,10 +52,11 @@ a {
 /* Hero Section */
 .hero3 {
     position: relative;
-    height: 100vh; /* full viewport height */
-    background-image: url('../images/ILOVEPETLOVESTIDIO.jpg');
-    background-size: contain;
-    background-position: center;
+    height: 150vh;
+    background-image: url('../images/grooming.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; /* add this so it doesn’t repeat */
+    background-position: center 30%;
     color: white;
 }
 
@@ -76,10 +77,11 @@ a {
 /* Hero Section */
 .hero4 {
     position: relative;
-    height: 120vh; /* full viewport height */
-    background-image: url('../images/ABOUT.jpg');
-    background-size: contain;
-    background-position: center;
+    height: 150vh;
+    background-image: url('../images/grooming.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; /* add this so it doesn’t repeat */
+    background-position: center 30%;
     color: white;
 }
 
@@ -170,6 +172,7 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
 
 
 
