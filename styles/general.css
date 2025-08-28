@@ -18,22 +18,43 @@ a {
 /* Hero Section */
 .hero {
     position: relative;
-    height: 100vh; /* full viewport height */
+    height: 150vh; /* full viewport height */
     background-image: url('../images/unnamed.webp');
     background-size: cover;
-    background-position: center;
+    background-position: center 30%;
     color: white;
 }
 
 /* Hero Section */
 .hero2 {
     position: relative;
-    height: 100vh; /* full viewport height */
-    background-image: url('../images/Screenshot\ 2025-08-28\ 023340.png');
+    height: 150vh; /* full viewport height */
+    background-image: url('../images/grooming.jpg');
     background-size: cover;
+    background-position: center 30%;
+    color: white;
+}
+
+/* Hero Section */
+.hero3 {
+    position: relative;
+    height: 100vh; /* full viewport height */
+    background-image: url('../images/ILOVEPETLOVESTIDIO.jpg');
+    background-size: fill;
     background-position: center;
     color: white;
 }
+
+/* Hero Section */
+.hero4 {
+    position: relative;
+    height: 120vh; /* full viewport height */
+    background-image: url('../images/ABOUT.jpg');
+    background-size: fill;
+    background-position: center;
+    color: white;
+}
+
 
 .hero::before {
     content: "";
@@ -59,6 +80,11 @@ a {
     opacity: 0; /* prevent flash before animation */
     animation: fadeInPop 1.2s ease-out forwards;
     animation-delay: 0.3s;
+}
+
+.hero-content p,h1 {
+    box-shadow: 1px 2px 10px rgba(0,0,0,0.15);
+    background-color:rgba(128,128,128,0.50);
 }
 
 /* Fade + pop animation */
