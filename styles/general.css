@@ -53,7 +53,7 @@ a {
 .hero3 {
     position: relative;
     height: 150vh;
-    background-image: url('../images/grooming.jpg');
+    background-image: url('../images/ILOVEPETLOVESTIDIO.jpg');
     background-size: cover;
     background-repeat: no-repeat; /* add this so it doesn’t repeat */
     background-position: center 30%;
@@ -78,7 +78,7 @@ a {
 .hero4 {
     position: relative;
     height: 150vh;
-    background-image: url('../images/grooming.jpg');
+    background-image: url('../images/ABOUT.jpg');
     background-size: cover;
     background-repeat: no-repeat; /* add this so it doesn’t repeat */
     background-position: center 30%;
@@ -172,6 +172,7 @@ a {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
 
 
 
