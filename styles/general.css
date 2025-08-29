@@ -175,6 +175,22 @@ a {
 
 
 
+.btn-orange {
+    background-color: #efb22e;   /* your navbar orange */
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;  /* bigger padding */
+    font-size: 1.2rem;   /* bigger text */
+    border: none;
+    border-radius: 8px;  /* smooth corners */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-orange:hover {
+    background-color: #d99d1a;  /* slightly darker orange */
+    transform: scale(1.05);     /* subtle zoom effect */
+    color: white;
+}
 
 
 
