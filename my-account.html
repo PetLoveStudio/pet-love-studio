@@ -649,6 +649,39 @@
         showToast("Error saving account info: " + err.message, "danger");
       }
     });
+
+    // --- Add Pet modal handler ---
+document.addEventListener('DOMContentLoaded', () => {
+  const addForm = document.getElementById('add-pet-form');
+  if (!addForm) return;
+
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name    = document.getElementById('new-pet-name').value.trim();
+    const species = document.getElementById('new-pet-species').value;
+    const ageStr  = document.getElementById('new-pet-age').value;
+    const color   = document.getElementById('new-pet-color').value.trim();
+
+    const age = Number(ageStr);
+    if (!name || !species || !ageStr || Number.isNaN(age) || !color) return;
+
+    // create a simple unique id for the pet
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    pets.push({ id, name, species, age, color });
+
+    // re-render list and enable "Save Changes"
+    renderPets();
+    markDirty(true);
+
+    // close modal + reset form
+    const modalEl = document.getElementById('addPetModal');
+    const modal   = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+    addForm.reset();
+  });
+});
+
   </script>
 
   <!-- Add Pet Modal -->
