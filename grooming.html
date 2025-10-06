@@ -1,115 +1,457 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grooming - Pet Love Studio</title>
-<link rel="icon" href="images/497663176_703682725367800_1093382578716552799_n.png" type="image/x-icon">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Grooming - Pet Love Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="images/497663176_703682725367800_1093382578716552799_n.png" type="image/x-icon">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="styles/general.css">
+  <!-- Fonts & Bootstrap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/general.css">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; }
+    .custom-navbar { background: orange; }
+    .custom-footer { background: orange; color: #212529; }
+    .auth-buttons .btn { --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .6rem; }
+    .hero2 { background: url('images/grooming.jpg') center/cover no-repeat; min-height: 40vh; max-height: 80vh; position: relative; color: #fff; }
+    .hero2::before { content:""; position:absolute; inset:0; background: rgba(0,0,0,0.5); }
+    .hero-content { position: relative; z-index: 1; }
+    #time-slots .btn { min-width: 90px; }
+  </style>
 </head>
 <body>
 
+  <!-- NAVBAR (matches Contact page style) -->
   <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
-            <img src="images/497663176_703682725367800_1093382578716552799_n.png" 
-                 alt="Logo" width="50" height="50" class="me-2">
-            Pet Love Studio
-        </a>
-        
-        <a  style="margin-left: 15px;" class="navbar-brand d-flex align-items-center" href="https://www.instagram.com/pet_love_studio/" target="_blank">
-          <p class="navbar-brand d-flex align-items-center" style="margin-top: 2px; font-size: 18px;">Follow us on</p>
-          <img style="margin-left: 10px;" src="images/instagram-new--v2.png" 
-                 alt="insta" width="35" height="35" class="me-2">
-        </a>
-                <a class="navbar-brand d-flex align-items-center" href="https://www.facebook.com/profile.php?id=61576540510268" target="_blank">
-                    
-          <img style="margin-bottom: 1px;" src="images/Facebook-icon-white-PNG-large-size.png" 
-                 alt="fb" width="27" height="27" class="me-2">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link active" href="grooming.html">Book Grooming Appointment</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      <a style="font-size: 15px;" class="navbar-brand d-flex align-items-center" href="index.html">
+        <img  src="images/497663176_703682725367800_1093382578716552799_n.png" alt="Logo" width="50" height="50" class="me-2">
+        Pet Love Studio
+      </a>
+
+      <!-- Social icons (same as Contact page) -->
+      <a style class="navbar-brand d-flex align-items-center" href="https://www.instagram.com/pet_love_studio/" target="_blank" rel="noopener">
+        <img  src="images/instagram-new--v2.png" alt="insta" width="25" height="25" class="me-2">
+      </a>
+      <a class="navbar-brand d-flex align-items-center" href="https://www.facebook.com/profile.php?id=61576540510268" target="_blank" rel="noopener">
+        <img style="margin-bottom: 1px;" src="images/Facebook-icon-white-PNG-large-size.png" alt="fb" width="21" height="21" class="me-2">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Links (right aligned, same order as Contact) -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="grooming.html">Book Grooming Appointment</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+
+        <!-- Auth buttons / account (kept minimal, same color family) -->
+        <ul class="navbar-nav auth-buttons d-flex flex-row gap-2 ms-lg-3 mt-2 mt-lg-0">
+          <!-- Logged OUT -->
+          <li class="nav-item" id="btn-show-login">
+            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button>
+          </li>
+          <li class="nav-item" id="btn-show-signup">
+            <button class="btn btn-light text-dark btn-sm" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button>
+          </li>
+
+          <!-- Logged IN -->
+          <li class="nav-item dropdown d-none" id="user-dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user-email">Account</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="my-account.html">My Account</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" id="btn-logout">Log out</button></li>
             </ul>
-        </div>
+          </li>
+        </ul>
+      </div>
     </div>
-</nav>
+  </nav>
 
-<!-- Hero Section -->
-<section class="hero2 d-flex align-items-center justify-content-center text-center">
+  <!-- Admin Panel link (hidden by default) -->
+  <div id="admin-section" class="container my-5 d-none">
+    <div class="alert alert-dark">
+      <h4 class="alert-heading">🔑 Admin Access</h4>
+      <p>You are logged in as the administrator.</p>
+      <a href="admin.html" class="btn btn-dark">Go to Admin Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero2 d-flex align-items-center justify-content-center text-center">
     <div class="hero-content">
-        <h1>Book a Grooming Appointment</h1>
-        <p>Επιλέξτε μία από τις παρακάτω υπηρεσίες μας</p>
+      <h1>Book a Grooming Appointment</h1>
+      <p>Επιλέξτε υπηρεσία, κατοικίδιο, ημερομηνία και ώρα</p>
     </div>
-</section>
+  </section>
 
+  <!-- Booking UI -->
+  <div class="container my-5">
+    <div id="booking-alert" class="alert d-none" role="alert"></div>
 
- <div style="display: flex; justify-content: center; gap: 13px; padding-left: 5px; padding-right: 5px;">
-        <a href="kouremaLousimo.html">
-          <button class="btn btn-orange" style="margin-top: 40px;">Koύρεμα & Λούσιμο</button>
-        </a>
-        <a href="lousimo.html">
-          <button class="btn btn-orange" style="margin-top: 40px;">Mόνο Λούσιμο</button>
-        </a>
+    <!-- Step 1: Service -->
+    <h3>1. Επιλέξτε Υπηρεσία</h3>
+    <div class="row g-2 mb-4">
+      <div class="col-12 col-md-6">
+        <button class="btn btn-orange w-100" id="btn-lousimo">🛁 Μόνο Λούσιμο</button>
+      </div>
+      <div class="col-12 col-md-6">
+        <button class="btn btn-orange w-100" id="btn-kourema">✂️ Κούρεμα & Λούσιμο</button>
+      </div>
+    </div>
+    <input type="hidden" id="service" value="Lousimo">
+
+    <!-- Step 2: Pet -->
+    <h3>2. Επιλέξτε Κατοικίδιο</h3>
+    <div class="mb-3">
+      <select id="petSelect" class="form-select" disabled>
+        <option value="">Loading your pets…</option>
+      </select>
+      <div id="noPetsMsg" class="form-text d-none">
+        Δεν έχετε προσθέσει κατοικίδιο. Προσθέστε από τη σελίδα <a href="my-account.html">My Account</a>.
+      </div>
+    </div>
+
+    <!-- Step 3: Date -->
+    <h3>3. Επιλέξτε Ημερομηνία</h3>
+    <input type="text" id="datePicker" class="form-control mb-3" placeholder="Select a date">
+
+    <!-- Step 4: Time -->
+    <h3>4. Επιλέξτε Ώρα</h3>
+    <div id="time-slots" class="d-flex flex-wrap gap-2 mb-4"></div>
+
+    <button id="confirmBooking" class="btn btn-dark" disabled>Confirm Booking</button>
   </div>
-  <!-- Grooming Gallery -->
-<section class="container my-5">
-  <h2 class="text-center mb-4">🐾Our Grooming Gallery📷</h2>
-  <div class="row g-3">
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023304.png" class="img-fluid rounded shadow" alt="Pet Grooming 1">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023319.png" class="img-fluid rounded shadow" alt="Pet Grooming 2">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023329.png" class="img-fluid rounded shadow" alt="Pet Grooming 3">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023340.png" class="img-fluid rounded shadow" alt="Pet Grooming 4">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023347.png" class="img-fluid rounded shadow" alt="Pet Grooming 5">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023358.png" class="img-fluid rounded shadow" alt="Pet Grooming 6">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023410.png" class="img-fluid rounded shadow" alt="Pet Grooming 6">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 023417.png" class="img-fluid rounded shadow" alt="Pet Grooming 6">
-    </div>
-    <div class="col-sm-6 col-md-4">
-      <img src="images/Screenshot 2025-08-28 124031.png" class="img-fluid rounded shadow" alt="Pet Grooming 6">
+
+  <!-- Footer -->
+  <footer class="custom-footer text-center py-3">
+    Made and designed by TEAM 10 - UCY - EPL343 - WINTER SEMESTER 2025 ©
+  </footer>
+
+  <!-- ===== Modals (Auth) ===== -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="login-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Log in</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="login-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+          <div class="form-text mt-2">Forgot password? <a href="#" id="link-reset">Reset here</a></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Log in</button>
+        </div>
+      </form>
     </div>
   </div>
-</section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="signup-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Create account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="signup-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="signup-password" placeholder="Password (min 6 chars)" minlength="6" required>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Sign up</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<!-- Footer -->
-<footer class="custom-footer text-center py-3">
-  Made and designed by  
-  <a style="text-decoration: underline;" href="https://koumasweb.com" target="_blank">
-    KoumasWeb
-  </a>
-   © 2025
-</footer>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth, onAuthStateChanged,
+      createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      sendPasswordResetEmail, signOut
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore, enableIndexedDbPersistence, collection, onSnapshot, doc, runTransaction, setDoc, getDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3Tcp0-6bKPCaLLCA-A9yiYDpWiZa_9wU",
+      authDomain: "pet-love-studio.firebaseapp.com",
+      projectId: "pet-love-studio",
+      storageBucket: "pet-love-studio.firebasestorage.app",
+      messagingSenderId: "719122537267",
+      appId: "1:719122537267:web:f47830925e1ea970e17c46"
+    };
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    enableIndexedDbPersistence(db).catch(()=>{});
+
+    // Helpers
+    const alertBox = document.getElementById('booking-alert');
+    function showAlert(msg, type='success') {
+      alertBox.className = `alert alert-${type}`;
+      alertBox.textContent = msg;
+      alertBox.classList.remove('d-none');
+      setTimeout(() => alertBox.classList.add('d-none'), 3500);
+    }
+
+    // Navbar refs
+    const btnShowLogin  = document.getElementById('btn-show-login');
+    const btnShowSignup = document.getElementById('btn-show-signup');
+    const userDropdown  = document.getElementById('user-dropdown');
+    const userEmailLink = document.getElementById('user-email');
+    const adminSection  = document.getElementById('admin-section');
+    const adminMenuLink = document.getElementById('admin-menu-link');
+    const OWNER_EMAIL   = "marikonkouma@gmail.com";
+
+    // Helper: set dropdown label to Full Name or fallback to email
+    function setNavbarAccountLabel(profile, fallbackEmail) {
+      const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim();
+      userEmailLink.textContent = fullName || fallbackEmail || "Account";
+    }
+
+    // Auth modals actions
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        showAlert('Account created! You are now logged in.');
+        bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+      } catch (err) { showAlert(err.message, 'danger'); }
+    });
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showAlert('Welcome back!');
+        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+      } catch (err) { showAlert(err.message, 'danger'); }
+    });
+    document.getElementById('link-reset').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { showAlert('Enter your email in the login form first.', 'warning'); return; }
+      try { await sendPasswordResetEmail(auth, email); showAlert('Password reset email sent.'); }
+      catch (err) { showAlert(err.message, 'danger'); }
+    });
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      try { await signOut(auth); showAlert('Logged out.'); }
+      catch (err) { showAlert(err.message, 'danger'); }
+    });
+
+    // Pets + booking state
+    const petSelect = document.getElementById('petSelect');
+    const noPetsMsg = document.getElementById('noPetsMsg');
+    let pets = [];
+    let selectedDate = null;
+    let selectedTime = null;
+
+    // Auth state: navbar + admin + load profile(name) + pets
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Show account UI
+        btnShowLogin.classList.add('d-none');
+        btnShowSignup.classList.add('d-none');
+        userDropdown.classList.remove('d-none');
+        // provisional label
+        setNavbarAccountLabel({}, user.email);
+
+        const isOwner = user.email === OWNER_EMAIL;
+        if (adminSection) adminSection.classList.toggle('d-none', !isOwner);
+        if (adminMenuLink) adminMenuLink.classList.toggle('d-none', !isOwner);
+
+        // Load profile to get full name
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          const data = snap.exists() ? snap.data() : {};
+          const profile = data.profile || {};
+          setNavbarAccountLabel(profile, user.email);
+
+          // Load pets for dropdown
+          pets = Array.isArray(data.pets) ? data.pets : [];
+          renderPetDropdown(pets);
+        } catch (err) {
+          setNavbarAccountLabel({}, user.email);
+          renderPetDropdown([]);
+          showAlert("Error loading account info: " + err.message, 'danger');
+        }
+      } else {
+        btnShowLogin.classList.remove('d-none');
+        btnShowSignup.classList.remove('d-none');
+        userDropdown.classList.add('d-none');
+        if (adminSection) adminSection.classList.add('d-none');
+        renderPetDropdown(null); // locks dropdown
+        showAlert("Παρακαλώ συνδεθείτε για να κλείσετε ραντεβού.", "danger");
+      }
+    });
+
+    function renderPetDropdown(petsArr) {
+      if (!Array.isArray(petsArr)) {
+        petSelect.innerHTML = `<option value="">Log in to select a pet</option>`;
+        petSelect.disabled = true;
+        noPetsMsg.classList.add('d-none');
+        return;
+      }
+      if (petsArr.length === 0) {
+        petSelect.innerHTML = `<option value="">No pets found</option>`;
+        petSelect.disabled = true;
+        noPetsMsg.classList.remove('d-none');
+      } else {
+        petSelect.disabled = false;
+        noPetsMsg.classList.add('d-none');
+        petSelect.innerHTML = `<option value="">Select your pet</option>` + petsArr.map(p =>
+          `<option value="${p.id}" data-name="${p.name||''}" data-species="${p.species||''}" data-age="${p.age??''}" data-color="${p.color||''}">
+            ${p.name || '(Unnamed)'} — ${p.species || 'Pet'}
+          </option>`
+        ).join('');
+      }
+      updateConfirmEnabled();
+    }
+
+    // Service selection
+    const serviceInput = document.getElementById('service');
+    document.getElementById('btn-lousimo').addEventListener('click', () => {
+      serviceInput.value = 'Lousimo';
+      showAlert('Επιλέξατε: Μόνο Λούσιμο', 'info');
+    });
+    document.getElementById('btn-kourema').addEventListener('click', () => {
+      serviceInput.value = 'Kourema+Lousimo';
+      showAlert('Επιλέξατε: Κούρεμα & Λούσιμο', 'info');
+    });
+
+    // Calendar
+    const datePicker = flatpickr("#datePicker", {
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      onChange: (dates, dateStr) => loadTimes(dateStr)
+    });
+
+    const ALL_TIMES = ["10:00","11:00","12:00","14:00","15:00","16:00"];
+    const dayCache = new Map();
+    const timeSlotsDiv = document.getElementById("time-slots");
+    const confirmBtn = document.getElementById("confirmBooking");
+
+    // Preload whole month realtime
+    const today = new Date();
+    const yearMonth = today.toISOString().slice(0,7); // "YYYY-MM"
+    const daysCol = collection(db, "days");
+    onSnapshot(daysCol, (snapshot) => {
+      snapshot.forEach(docSnap => {
+        if (docSnap.id.startsWith(yearMonth)) {
+          dayCache.set(docSnap.id, docSnap.data().bookedTimes || []);
+        }
+      });
+      if (selectedDate) renderSlots(selectedDate);
+    });
+
+    function loadTimes(dateStr) {
+      selectedDate = dateStr;
+      selectedTime = null;
+      confirmBtn.disabled = true;
+      renderSlots(dateStr);
+    }
+
+    function renderSlots(dateStr) {
+      const booked = dayCache.get(dateStr) || [];
+      timeSlotsDiv.innerHTML = "";
+      ALL_TIMES.forEach(time => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-outline-dark";
+        btn.textContent = time;
+        if (booked.includes(time)) {
+          btn.disabled = true;
+        } else {
+          btn.addEventListener("click", () => {
+            selectedTime = time;
+            [...timeSlotsDiv.children].forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            updateConfirmEnabled();
+          });
+        }
+        timeSlotsDiv.appendChild(btn);
+      });
+    }
+
+    function updateConfirmEnabled() {
+      const petId = petSelect.value;
+      document.getElementById('confirmBooking').disabled = !(selectedDate && selectedTime && petId);
+    }
+    petSelect.addEventListener('change', updateConfirmEnabled);
+
+    // Confirm booking
+    document.getElementById('confirmBooking').addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) { showAlert("Please log in.", "danger"); return; }
+      if (!selectedDate || !selectedTime) return;
+
+      const service = serviceInput.value;
+
+      // selected pet
+      const opt = petSelect.options[petSelect.selectedIndex];
+      if (!opt || !opt.value) { showAlert("Please select a pet.", "warning"); return; }
+      const petData = {
+        petId: opt.value,
+        petName: opt.dataset.name || "",
+        species: opt.dataset.species || "",
+        age: opt.dataset.age ? Number(opt.dataset.age) : null,
+        color: opt.dataset.color || ""
+      };
+
+      const dayRef = doc(db, "days", selectedDate);
+      const apptRef = doc(db, "appointments", `${selectedDate}_${selectedTime}`);
+
+      try {
+        await runTransaction(db, async (tx) => {
+          const daySnap = await tx.get(dayRef);
+          const booked = daySnap.exists() ? (daySnap.data().bookedTimes || []) : [];
+          if (booked.includes(selectedTime)) throw new Error("Slot just booked!");
+
+          tx.set(dayRef, { bookedTimes: [...booked, selectedTime] }, { merge: true });
+          tx.set(apptRef, {
+            date: selectedDate,
+            time: selectedTime,
+            service,
+            userId: user.uid,
+            userEmail: user.email,
+            pet: petData,
+            createdAt: new Date()
+          });
+        });
+        showAlert(`Ραντεβού: ${selectedDate} στις ${selectedTime}`, "success");
+        document.getElementById('confirmBooking').disabled = true;
+      } catch (err) {
+        showAlert(err.message, "danger");
+      }
+    });
+  </script>
 </body>
 </html>
-
-
-

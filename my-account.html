@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Account - Pet Love Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/497663176_703682725367800_1093382578716552799_n.png" type="image/x-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="styles/general.css">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background:#f8f9fa; }
+    .custom-navbar { background: orange; }
+    .custom-footer { background: orange; color:#212529; }
+    .auth-buttons .btn { --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .6rem; }
+
+    .container-narrow { max-width: 860px; margin: 0 auto; }
+    .field-row { display:flex; align-items:center; gap:.5rem; }
+    .field-row .form-control[readonly] { background:#fff; }
+    .pet-card .form-control, .pet-card .form-select { max-width: 220px; }
+    .edit-btn { cursor:pointer; }
+
+    .appt-card .badge { min-width: 84px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
+    <div class="container">
+      <a  style="font-size: 15px;" class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/497663176_703682725367800_1093382578716552799_n.png" alt="Logo" width="50" height="50" class="me-2">
+        Pet Love Studio
+      </a>
+
+      <!-- Social icons (same as Contact page) -->
+      <a style class="navbar-brand d-flex align-items-center" href="https://www.instagram.com/pet_love_studio/" target="_blank" rel="noopener">
+        <img  src="images/instagram-new--v2.png" alt="insta" width="25" height="25" class="me-2">
+      </a>
+      <a class="navbar-brand d-flex align-items-center" href="https://www.facebook.com/profile.php?id=61576540510268" target="_blank" rel="noopener">
+        <img style="margin-bottom: 1px;" src="images/Facebook-icon-white-PNG-large-size.png" alt="fb" width="21" height="21" class="me-2">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Links -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="grooming.html">Book Grooming Appointment</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="my-account.html">My Account</a></li>
+        </ul>
+
+        <!-- Auth / Account -->
+        <ul class="navbar-nav auth-buttons d-flex flex-row gap-2 ms-lg-3 mt-2 mt-lg-0">
+          <!-- Logged OUT -->
+          <li class="nav-item" id="btn-show-login">
+            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button>
+          </li>
+          <li class="nav-item" id="btn-show-signup">
+            <button class="btn btn-light text-dark btn-sm" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button>
+          </li>
+
+          <!-- Logged IN -->
+          <li class="nav-item dropdown d-none" id="user-dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user-email">Account</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="my-account.html">My Account</a></li>
+              <li><a class="dropdown-item d-none" id="admin-menu-link" href="admin.html">Admin Dashboard</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" id="btn-logout">Log out</button></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin banner -->
+  <div id="admin-section" class="container my-4 d-none">
+    <div class="alert alert-dark mb-0">
+      <h6 class="mb-1">🔑 Admin Access</h6>
+      <a href="admin.html" class="btn btn-dark btn-sm">Go to Admin Dashboard</a>
+    </div>
+  </div>
+
+  <main class="container container-narrow py-4">
+    <div id="auth-alert" class="alert d-none" role="alert"></div>
+
+    <!-- Logged OUT -->
+    <div id="please-login" class="alert alert-warning d-none">
+      Please log in to view and manage your account.
+    </div>
+
+    <!-- Logged IN -->
+    <div id="account-content" class="d-none">
+      <h2 class="mb-3">My Account</h2>
+      <div id="account-toast" class="alert d-none" role="alert"></div>
+
+      <!-- Account Information -->
+      <div class="card shadow-sm p-4 mb-4">
+        <h5 class="mb-3">Account Information</h5>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label mb-1">First Name</label>
+            <div class="field-row">
+              <input type="text" id="acc-first" class="form-control" readonly>
+              <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label mb-1">Last Name</label>
+            <div class="field-row">
+              <input type="text" id="acc-last" class="form-control" readonly>
+              <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label mb-1">Phone</label>
+            <div class="field-row">
+              <input type="tel" id="acc-phone" class="form-control" readonly placeholder="+357 99 123456">
+              <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label mb-1">Email</label>
+            <input type="email" id="acc-email" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button id="save-profile" class="btn btn-dark" disabled>Save Account Info</button>
+        </div>
+
+        <small class="text-muted d-block mt-2">Tip: Click the ✏️ to edit your details. Use “Save Account Info” to store them.</small>
+      </div>
+
+      <!-- Pets -->
+      <div class="card shadow-sm p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <h5 class="m-0">Your Pets</h5>
+          <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addPetModal">
+            <i class="bi bi-plus-lg me-1"></i> Add Pet
+          </button>
+        </div>
+
+        <div id="pets-list" class="d-grid gap-3"></div>
+        <div id="pets-empty" class="text-muted">You haven’t added any pets yet.</div>
+
+        <div class="mt-4">
+          <button id="save-all" class="btn btn-dark" disabled>Save Changes</button>
+        </div>
+
+        <small class="text-muted d-block mt-2">Tip: Click the ✏️ to edit each pet. Use “Save Changes” to store them.</small>
+      </div>
+
+      <!-- My Appointments -->
+      <div class="card shadow-sm p-4">
+        <h5 class="mb-3">My Appointments</h5>
+
+        <h6 class="mt-2">Upcoming</h6>
+        <div id="appts-upcoming" class="d-grid gap-2"></div>
+        <div id="appts-upcoming-empty" class="text-muted">No upcoming appointments.</div>
+
+        <hr class="my-4">
+
+        <h6>Past</h6>
+        <div id="appts-past" class="d-grid gap-2"></div>
+        <div id="appts-past-empty" class="text-muted">No past appointments.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="custom-footer text-center py-3">
+    Made and designed by TEAM 10 - UCY - EPL343 - WINTER SEMESTER 2025 ©
+  </footer>
+
+  <!-- ===== Modals (Auth) ===== -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="login-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Log in</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="login-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+          <div class="form-text mt-2">Forgot password? <a href="#" id="link-reset">Reset here</a></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Log in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="signup-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Create account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="signup-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="signup-password" placeholder="Password (min 6 chars)" minlength="6" required>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Sign up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase + Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth, onAuthStateChanged,
+      createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      sendPasswordResetEmail, signOut
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc,
+      collection, query, where, onSnapshot,
+      deleteDoc, updateDoc, arrayRemove
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3Tcp0-6bKPCaLLCA-A9yiYDpWiZa_9wU",
+      authDomain: "pet-love-studio.firebaseapp.com",
+      projectId: "pet-love-studio",
+      storageBucket: "pet-love-studio.firebasestorage.app",
+      messagingSenderId: "719122537267",
+      appId: "1:719122537267:web:f47830925e1ea970e17c46"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // Navbar elements
+    const btnShowLogin  = document.getElementById('btn-show-login');
+    const btnShowSignup = document.getElementById('btn-show-signup');
+    const userDropdown  = document.getElementById('user-dropdown');
+    const userEmailLink = document.getElementById('user-email');
+    const adminSection  = document.getElementById('admin-section');
+    const adminMenuLink = document.getElementById('admin-menu-link');
+    const OWNER_EMAIL   = "marikonkouma@gmail.com";
+
+    // Page elements
+    const authAlert   = document.getElementById('auth-alert');
+    const pleaseLogin = document.getElementById('please-login');
+    const accountContent = document.getElementById('account-content');
+    const accountToast = document.getElementById('account-toast');
+
+    const firstInput = document.getElementById('acc-first');
+    const lastInput  = document.getElementById('acc-last');
+    const phoneInput = document.getElementById('acc-phone');
+    const emailInput = document.getElementById('acc-email');
+
+    const petsList  = document.getElementById('pets-list');
+    const petsEmpty = document.getElementById('pets-empty');
+    const saveAllBtn = document.getElementById('save-all');
+    const saveProfileBtn = document.getElementById('save-profile');
+
+    const apptsUpcoming = document.getElementById('appts-upcoming');
+    const apptsUpcomingEmpty = document.getElementById('appts-upcoming-empty');
+    const apptsPast = document.getElementById('appts-past');
+    const apptsPastEmpty = document.getElementById('appts-past-empty');
+
+    let currentUser = null;
+    let pets = [];
+    let dirty = false;
+    let unsubscribeAppts = null;
+
+    function showAlert(el, msg, type='success') {
+      el.className = `alert alert-${type}`;
+      el.textContent = msg;
+      el.classList.remove('d-none');
+      setTimeout(()=>el.classList.add('d-none'), 3000);
+    }
+    const showAuthAlert = (msg, type) => showAlert(authAlert, msg, type);
+    const showToast     = (msg, type) => showAlert(accountToast, msg, type);
+
+    function markDirty(flag=true) {
+      dirty = flag;
+      saveAllBtn.disabled = !dirty;
+    }
+
+    // Build full name and update navbar text
+    function setNavbarAccountLabel(profile, fallbackEmail) {
+      const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim();
+      userEmailLink.textContent = fullName || fallbackEmail || "Account";
+    }
+
+    // Inline edit (✏️) for account fields
+    function wireAccountEditors() {
+      document.querySelectorAll('.card .edit-btn').forEach(icon => {
+        icon.addEventListener('click', () => {
+          const ctrl = icon.previousElementSibling;
+          if (!ctrl) return;
+          ctrl.readOnly = !ctrl.readOnly;
+          if (!ctrl.readOnly) ctrl.focus();
+          saveProfileBtn.disabled = false;
+          markDirty(true);
+        });
+      });
+      [firstInput, lastInput, phoneInput].forEach(el => {
+        el.addEventListener('input', () => {
+          saveProfileBtn.disabled = false;
+          markDirty(true);
+        });
+      });
+    }
+
+    // === Appointments helpers ===
+    function toDate(dateStr, timeStr) {
+      const [y,m,d] = dateStr.split('-').map(Number);
+      const [hh,mm] = timeStr.split(':').map(Number);
+      return new Date(y, (m-1), d, hh, mm || 0, 0, 0);
+    }
+
+    function renderAppointments(list) {
+      const now = new Date();
+      const upcoming = [];
+      const past = [];
+      list.forEach(a => (toDate(a.date, a.time) >= now ? upcoming : past).push(a));
+
+      upcoming.sort((a,b)=> toDate(a.date,a.time)-toDate(b.date,b.time));
+      past.sort((a,b)=> toDate(b.date,b.time)-toDate(a.date,a.time));
+
+      apptsUpcoming.innerHTML = "";
+      apptsPast.innerHTML = "";
+
+      if (upcoming.length === 0) {
+        apptsUpcomingEmpty.style.display = "block";
+      } else {
+        apptsUpcomingEmpty.style.display = "none";
+        upcoming.forEach(a => {
+          const card = document.createElement('div');
+          card.className = "appt-card border rounded p-3 bg-white";
+          card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <div class="fw-bold">${a.date} — ${a.time}</div>
+                <div class="small text-muted">Service: ${a.service}</div>
+                ${a.pet ? `<div class="small text-muted">Pet: ${a.pet.petName || ''} (${a.pet.species || ''})</div>` : ''}
+              </div>
+              <div class="d-flex gap-2">
+                <span class="badge bg-success align-self-center">Booked</span>
+                <button class="btn btn-outline-danger btn-sm" data-action="cancel">Cancel</button>
+              </div>
+            </div>
+          `;
+          card.querySelector('[data-action="cancel"]').addEventListener('click', async () => {
+            if (!confirm('Cancel this appointment?')) return;
+            try {
+              await deleteDoc(doc(db, "appointments", `${a.date}_${a.time}`));
+              await updateDoc(doc(db, "days", a.date), { bookedTimes: arrayRemove(a.time) });
+              showToast('Appointment cancelled.');
+            } catch (err) {
+              showToast('Error cancelling: ' + err.message, 'danger');
+            }
+          });
+          apptsUpcoming.appendChild(card);
+        });
+      }
+
+      if (past.length === 0) {
+        apptsPastEmpty.style.display = "block";
+      } else {
+        apptsPastEmpty.style.display = "none";
+        past.forEach(a => {
+          const card = document.createElement('div');
+          card.className = "appt-card border rounded p-3 bg-white";
+          card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <div class="fw-bold">${a.date} — ${a.time}</div>
+                <div class="small text-muted">Service: ${a.service}</div>
+                ${a.pet ? `<div class="small text-muted">Pet: ${a.pet.petName || ''} (${a.pet.species || ''})</div>` : ''}
+              </div>
+              <span class="badge bg-secondary align-self-center">Past</span>
+            </div>
+          `;
+          apptsPast.appendChild(card);
+        });
+      }
+    }
+
+    // Auth state
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Navbar updates (temporary label until profile loads)
+        btnShowLogin.classList.add('d-none');
+        btnShowSignup.classList.add('d-none');
+        userDropdown.classList.remove('d-none');
+        setNavbarAccountLabel({}, user.email);
+
+        // Admin visibility
+        const isOwner = user.email === OWNER_EMAIL;
+        adminSection.classList.toggle('d-none', !isOwner);
+        adminMenuLink.classList.toggle('d-none', !isOwner);
+
+        // Page content
+        pleaseLogin.classList.add('d-none');
+        accountContent.classList.remove('d-none');
+        emailInput.value = user.email || "";
+
+        currentUser = user;
+        try {
+          // Load profile + pets
+          const snap = await getDoc(doc(db, "users", user.uid));
+          const data = snap.exists() ? snap.data() : {};
+          const profile = data.profile || {};
+          firstInput.value = profile.firstName || "";
+          lastInput.value  = profile.lastName  || "";
+          phoneInput.value = profile.phone     || "";
+          pets = Array.isArray(data.pets) ? data.pets : [];
+
+          // Set navbar to full name (fallback to email)
+          setNavbarAccountLabel(profile, user.email);
+
+          renderPets();
+          wireAccountEditors();
+
+          // Listen to user's appointments
+          if (unsubscribeAppts) unsubscribeAppts();
+          const q = query(collection(db, "appointments"), where("userId", "==", user.uid));
+          unsubscribeAppts = onSnapshot(q, (snapshot) => {
+            const appts = [];
+            snapshot.forEach(docSnap => appts.push(docSnap.data()));
+            renderAppointments(appts);
+          });
+        } catch (err) {
+          showToast("Error loading account: " + err.message, "danger");
+        }
+      } else {
+        // Navbar
+        btnShowLogin.classList.remove('d-none');
+        btnShowSignup.classList.remove('d-none');
+        userDropdown.classList.add('d-none');
+        adminSection.classList.add('d-none');
+        adminMenuLink.classList.add('d-none');
+
+        // Page
+        accountContent.classList.add('d-none');
+        pleaseLogin.classList.remove('d-none');
+
+        if (unsubscribeAppts) { unsubscribeAppts(); unsubscribeAppts = null; }
+      }
+    });
+
+    // Auth actions
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        showAuthAlert('Account created! You are now logged in.');
+        bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+      } catch (err) {
+        showAuthAlert(err.message, 'danger');
+      }
+    });
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showAuthAlert('Welcome back!');
+        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+      } catch (err) {
+        showAuthAlert(err.message, 'danger');
+      }
+    });
+    document.getElementById('link-reset').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { showAuthAlert('Enter your email in the login form first.', 'warning'); return; }
+      try { await sendPasswordResetEmail(auth, email); showAuthAlert('Password reset email sent.'); }
+      catch (err) { showAuthAlert(err.message, 'danger'); }
+    });
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      try { await signOut(auth); showAuthAlert('Logged out.'); }
+      catch (err) { showAuthAlert(err.message, 'danger'); }
+    });
+
+    // Pets UI
+    function renderPets() {
+      petsList.innerHTML = "";
+      if (!pets.length) { petsEmpty.style.display = "block"; return; }
+      petsEmpty.style.display = "none";
+
+      pets.forEach((pet, idx) => {
+        const card = document.createElement('div');
+        card.className = "pet-card border rounded p-3 bg-white";
+        card.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+            <div class="w-100">
+              <div class="mb-2">
+                <label class="form-label mb-1">Pet Name</label>
+                <div class="field-row">
+                  <input class="form-control" data-key="name" value="${pet.name || ""}" readonly>
+                  <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label mb-1">Species</label>
+                <div class="field-row">
+                  <select class="form-select" data-key="species" disabled>
+                    <option value="">Select Species</option>
+                    <option ${pet.species==="Dog"?"selected":""}>Dog</option>
+                    <option ${pet.species==="Cat"?"selected":""}>Cat</option>
+                    <option ${pet.species==="Rabbit"?"selected":""}>Rabbit</option>
+                    <option ${pet.species==="Bird"?"selected":""}>Bird</option>
+                    <option ${pet.species==="Other"?"selected":""}>Other</option>
+                  </select>
+                  <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label mb-1">Age (years)</label>
+                <div class="field-row">
+                  <input type="number" class="form-control" data-key="age" value="${pet.age ?? ""}" readonly>
+                  <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+                </div>
+              </div>
+              <div>
+                <label class="form-label mb-1">Fur/Color</label>
+                <div class="field-row">
+                  <input class="form-control" data-key="color" value="${pet.color || ""}" readonly>
+                  <i class="bi bi-pencil-square edit-btn" title="Edit"></i>
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <button class="btn btn-outline-danger btn-sm" data-action="delete"><i class="bi bi-trash"></i> Delete</button>
+            </div>
+          </div>
+        `;
+
+        card.querySelectorAll('.edit-btn').forEach(icon => {
+          icon.addEventListener('click', () => {
+            const ctrl = icon.previousElementSibling;
+            if (ctrl.tagName === "INPUT") { ctrl.readOnly = !ctrl.readOnly; if (!ctrl.readOnly) ctrl.focus(); }
+            else if (ctrl.tagName === "SELECT") { ctrl.disabled = !ctrl.disabled; if (!ctrl.disabled) ctrl.focus(); }
+            markDirty(true);
+          });
+        });
+
+        card.querySelectorAll('input, select').forEach(ctrl => {
+          ctrl.addEventListener('input', () => {
+            const key = ctrl.dataset.key;
+            let val = ctrl.value;
+            if (key === "age") val = Number(val);
+            pets[idx] = { ...pets[idx], [key]: val };
+            markDirty(true);
+          });
+        });
+
+        card.querySelector('[data-action="delete"]').addEventListener('click', () => {
+          pets.splice(idx, 1);
+          renderPets();
+          markDirty(true);
+        });
+
+        petsList.appendChild(card);
+      });
+    }
+
+    // Save all (profile + pets)
+    saveAllBtn.addEventListener('click', async () => {
+      if (!currentUser) return;
+
+      const profile = {
+        firstName: firstInput.value.trim(),
+        lastName:  lastInput.value.trim(),
+        phone:     phoneInput.value.trim(),
+      };
+
+      try {
+        await setDoc(doc(db, "users", currentUser.uid), {
+          email: currentUser.email,
+          profile,
+          pets
+        }, { merge: true });
+
+        // Update navbar label live
+        setNavbarAccountLabel(profile, currentUser.email);
+
+        markDirty(false);
+        saveProfileBtn.disabled = true;
+        showToast("Changes saved.");
+      } catch (err) {
+        showToast("Error saving: " + err.message, "danger");
+      }
+    });
+
+    // Save Account Info only
+    saveProfileBtn.addEventListener('click', async () => {
+      if (!currentUser) return;
+
+      const profile = {
+        firstName: firstInput.value.trim(),
+        lastName:  lastInput.value.trim(),
+        phone:     phoneInput.value.trim(),
+      };
+
+      try {
+        await setDoc(doc(db, "users", currentUser.uid), {
+          email: currentUser.email,
+          profile
+        }, { merge: true });
+
+        // Update navbar label live
+        setNavbarAccountLabel(profile, currentUser.email);
+
+        saveProfileBtn.disabled = true;
+        showToast("Account info saved.");
+      } catch (err) {
+        showToast("Error saving account info: " + err.message, "danger");
+      }
+    });
+  </script>
+
+  <!-- Add Pet Modal -->
+  <div class="modal fade" id="addPetModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="add-pet-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a Pet</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Pet Name</label>
+            <input type="text" id="new-pet-name" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Species</label>
+            <select id="new-pet-species" class="form-select" required>
+              <option value="">Select Species</option>
+              <option>Dog</option>
+              <option>Cat</option>
+              <option>Rabbit</option>
+              <option>Bird</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Age (years)</label>
+            <input type="number" id="new-pet-age" class="form-control" min="0" step="1" required>
+          </div>
+          <div>
+            <label class="form-label">Fur/Color</label>
+            <input type="text" id="new-pet-color" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Add Pet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Pet Love Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', sans-serif; background:#f8f9fa; }
+    .admin-container { max-width: 1000px; margin: 2rem auto; }
+    .card { margin-bottom: 1rem; }
+    .time-pill { min-width: 92px; }
+  </style>
+</head>
+<body>
+  <div class="container admin-container">
+    <h2 class="mb-4">📅 Admin Dashboard</h2>
+    <div id="admin-alert" class="alert d-none" role="alert"></div>
+
+    <!-- Date picker -->
+    <div class="card p-3 mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-sm-6">
+          <label class="form-label">Select date</label>
+          <input type="date" id="manage-date" class="form-control" />
+        </div>
+        <div class="col-sm-6">
+          <small class="text-muted">Tip: choose a day to manage availability and bookings.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability -->
+    <div class="card p-3 mb-4">
+      <h4 class="mb-3">Available times (click Delete to block)</h4>
+      <div id="available-times" class="d-flex flex-wrap gap-2"></div>
+      <div id="available-empty" class="text-muted">Pick a date to view availability.</div>
+    </div>
+
+    <!-- Add availability (1-hour increments) -->
+    <div class="card p-3 mb-4">
+      <h4 class="mb-3">Add Availability (1-hour increments)</h4>
+      <form id="add-range-form" class="row g-2 align-items-end">
+        <div class="col-sm-4">
+          <label class="form-label">Start</label>
+          <input type="time" id="avail-start" class="form-control" step="3600" value="10:00" required>
+        </div>
+        <div class="col-sm-4">
+          <label class="form-label">End</label>
+          <input type="time" id="avail-end" class="form-control" step="3600" value="16:00" required>
+        </div>
+        <div class="col-sm-4 d-flex gap-2">
+          <button class="btn btn-success flex-fill" type="submit">Open range</button>
+          <button class="btn btn-outline-secondary flex-fill" id="btn-open-all" type="button">Open all defaults</button>
+        </div>
+      </form>
+      <small class="text-muted">Slots are generated at 1-hour steps (10:00, 11:00, …). Opening a time removes it from <code>bookedTimes</code>.</small>
+    </div>
+
+    <!-- Booked -->
+    <div class="card p-3">
+      <h4 class="mb-3">
+        Booked appointments for selected date <span id="selected-date-label" class="text-muted">(—)</span>
+      </h4>
+      <div id="booked-list"></div>
+      <div id="booked-empty" class="text-muted">Pick a date to view bookings.</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, onSnapshot, collection, query, where,
+      updateDoc, setDoc, deleteDoc, arrayUnion, arrayRemove
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // ---- Firebase config ----
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3Tcp0-6bKPCaLLCA-A9yiYDpWiZa_9wU",
+      authDomain: "pet-love-studio.firebaseapp.com",
+      projectId: "pet-love-studio",
+      storageBucket: "pet-love-studio.firebasestorage.app",
+      messagingSenderId: "719122537267",
+      appId: "1:719122537267:web:f47830925e1ea970e17c46"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ---- Owner restriction ----
+    const OWNER_EMAIL = "marikonkouma@gmail.com";
+
+    const alertBox = document.getElementById('admin-alert');
+    function showAlert(msg, type='success') {
+      alertBox.className = `alert alert-${type}`;
+      alertBox.textContent = msg;
+      alertBox.classList.remove('d-none');
+      setTimeout(()=>alertBox.classList.add('d-none'), 3000);
+    }
+
+    // ---- UI elements ----
+    const dateInput      = document.getElementById('manage-date');
+    const selectedDateLbl= document.getElementById('selected-date-label');
+    const availableWrap  = document.getElementById('available-times');
+    const availableEmpty = document.getElementById('available-empty');
+    const bookedList     = document.getElementById('booked-list');
+    const bookedEmpty    = document.getElementById('booked-empty');
+
+    // business hours (default set used by customer page)
+    const ALL_TIMES = ["10:00","11:00","12:00","14:00","15:00","16:00"];
+
+    let unsubscribeDay = null;
+    let unsubscribeBooked = null;
+
+    // simple cache for user profiles
+    const userProfileCache = new Map(); // userId -> {firstName, lastName, phone}
+
+    async function getUserProfile(userId) {
+      if (!userId) return {};
+      if (userProfileCache.has(userId)) return userProfileCache.get(userId) || {};
+      try {
+        const snap = await getDoc(doc(db, "users", userId));
+        const data = snap.exists() ? snap.data() : {};
+        const profile = data.profile || {};
+        const cached = {
+          firstName: profile.firstName || "",
+          lastName:  profile.lastName  || "",
+          phone:     profile.phone     || "",
+          email:     data.email        || ""
+        };
+        userProfileCache.set(userId, cached);
+        return cached;
+      } catch {
+        return {};
+      }
+    }
+
+    // Guard page
+    onAuthStateChanged(auth, (user) => {
+      if (!user || user.email !== OWNER_EMAIL) {
+        alert("Access denied. Owner only.");
+        window.location.href = "index.html";
+        return;
+      }
+      const today = new Date().toISOString().slice(0,10);
+      dateInput.value = today;
+      selectedDateLbl.textContent = `(${today})`;
+      attachListeners(today);
+    });
+
+    // Change date → reattach listeners
+    dateInput.addEventListener('change', () => {
+      const d = dateInput.value;
+      selectedDateLbl.textContent = d ? `(${d})` : "(—)";
+      attachListeners(d);
+    });
+
+    function attachListeners(dateStr) {
+      if (unsubscribeDay) unsubscribeDay();
+      if (unsubscribeBooked) unsubscribeBooked();
+
+      availableWrap.innerHTML = "";
+      availableEmpty.textContent = "Loading availability…";
+      bookedList.innerHTML = "";
+      bookedEmpty.textContent = "Loading bookings…";
+
+      if (!dateStr) return;
+
+      const dayRef = doc(db, "days", dateStr);
+
+      // availability = ALL_TIMES − bookedTimes
+      unsubscribeDay = onSnapshot(dayRef, (snap) => {
+        const bookedTimes = snap.exists() ? (snap.data().bookedTimes || []) : [];
+        const availableTimes = ALL_TIMES.filter(t => !bookedTimes.includes(t));
+
+        availableWrap.innerHTML = "";
+        if (availableTimes.length === 0) {
+          availableEmpty.textContent = "No available times for this date.";
+        } else {
+          availableEmpty.textContent = "";
+          availableTimes.forEach(time => {
+            const row = document.createElement('div');
+            row.className = "d-flex align-items-center gap-2";
+            row.innerHTML = `
+              <span class="badge bg-success time-pill">${time}</span>
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            `;
+            // Delete availability = add to bookedTimes (blocks it)
+            row.querySelector('button').addEventListener('click', async () => {
+              try {
+                await setDoc(dayRef, { bookedTimes: arrayUnion(time) }, { merge: true });
+                showAlert(`Removed availability ${dateStr} at ${time}`, "warning");
+              } catch (err) {
+                showAlert(err.message, "danger");
+              }
+            });
+            availableWrap.appendChild(row);
+          });
+        }
+      });
+
+      // booked list for date
+      const q = query(collection(db, "appointments"), where("date", "==", dateStr));
+      unsubscribeBooked = onSnapshot(q, async (snapshot) => {
+        bookedList.innerHTML = "";
+        if (snapshot.empty) {
+          bookedEmpty.textContent = "No bookings for this date.";
+          return;
+        }
+        bookedEmpty.textContent = "";
+
+        // Build rows; fetch user profiles (cached) per appointment
+        const rows = [];
+        for (const docSnap of snapshot.docs) {
+          const data = docSnap.data();
+          const profile = await getUserProfile(data.userId);
+          const petInfo = data.pet || {};
+          const fullName = (profile.firstName || profile.lastName)
+            ? `${profile.firstName || ""} ${profile.lastName || ""}`.trim()
+            : "(no name)";
+
+          const row = document.createElement('div');
+          row.className = "card p-3 mb-2";
+          row.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h5 class="mb-1">${data.time} — ${data.service}</h5>
+                <div class="small text-muted">
+                  <b>User:</b> ${fullName}
+                  ${profile.phone ? `&middot; <b>Phone:</b> ${profile.phone}` : ""}
+                  ${profile.email ? `&middot; <b>Email:</b> ${profile.email}` : ""}
+                </div>
+                <div class="small text-muted">
+                  <b>Pet:</b> ${petInfo.petName || "(unnamed)"}${petInfo.species ? ` (${petInfo.species})` : ""}
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-danger">Cancel</button>
+              </div>
+            </div>
+          `;
+          // Cancel logic
+          row.querySelector('button').addEventListener('click', async () => {
+            if (!confirm(`Cancel ${data.time} for ${fullName}?`)) return;
+            try {
+              await deleteDoc(doc(db, "appointments", docSnap.id));
+              await updateDoc(dayRef, { bookedTimes: arrayRemove(data.time) }); // free slot
+              showAlert(`Cancelled ${data.time} and freed slot`, "success");
+            } catch (err) {
+              showAlert(err.message, "danger");
+            }
+          });
+
+          rows.push(row);
+        }
+
+        // Append all rows
+        rows.sort((a, b) => {
+          // sort by time asc for nicer listing: extract HH:MM from title h5
+          const ta = a.querySelector('h5').textContent.split(' — ')[0];
+          const tb = b.querySelector('h5').textContent.split(' — ')[0];
+          return ta.localeCompare(tb);
+        });
+        rows.forEach(r => bookedList.appendChild(r));
+      });
+    }
+
+    // ----- Add Availability (range, 1-hour increments) -----
+    const addRangeForm = document.getElementById('add-range-form');
+    const inputStart   = document.getElementById('avail-start');
+    const inputEnd     = document.getElementById('avail-end');
+    const btnOpenAll   = document.getElementById('btn-open-all');
+
+    addRangeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const dateStr = dateInput.value;
+      const start = inputStart.value;
+      const end   = inputEnd.value;
+      if (!dateStr || !start || !end) return;
+
+      const times = generateHourlyTimes(start, end).filter(t => ALL_TIMES.includes(t));
+      if (times.length === 0) { showAlert("No default slots within that range.", "warning"); return; }
+
+      const dayRef = doc(db, "days", dateStr);
+      try {
+        // Removing from bookedTimes = opening availability
+        await setDoc(dayRef, { bookedTimes: [] }, { merge: true }); // ensure doc exists
+        await updateDoc(dayRef, { bookedTimes: arrayRemove(...times) });
+        showAlert(`Opened ${times.join(", ")}`, "success");
+      } catch (err) {
+        showAlert(err.message, "danger");
+      }
+    });
+
+    btnOpenAll.addEventListener('click', async () => {
+      const dateStr = dateInput.value;
+      if (!dateStr) return;
+      const dayRef = doc(db, "days", dateStr);
+      try {
+        await setDoc(dayRef, { bookedTimes: [] }, { merge: true });
+        await updateDoc(dayRef, { bookedTimes: arrayRemove(...ALL_TIMES) });
+        showAlert("Opened all default times for the day.", "success");
+      } catch (err) {
+        showAlert(err.message, "danger");
+      }
+    });
+
+    function generateHourlyTimes(startHHMM, endHHMM) {
+      // Generates [start, start+1h, ...] not including end if end==start+N hours
+      const result = [];
+      const [sh, sm] = startHHMM.split(':').map(Number);
+      const [eh, em] = endHHMM.split(':').map(Number);
+      const start = new Date(2000,1,1, sh, sm||0, 0);
+      const end   = new Date(2000,1,1, eh, em||0, 0);
+      if (end <= start) return result;
+
+      for (let t = new Date(start); t < end; t.setHours(t.getHours()+1)) {
+        const hh = String(t.getHours()).padStart(2,'0');
+        const mm = String(t.getMinutes()).padStart(2,'0');
+        result.push(`${hh}:${mm}`);
+      }
+      return result;
+    }
+  </script>
+</body>
+</html>

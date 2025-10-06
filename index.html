@@ -1,76 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Love Studio</title>
-    <link rel="icon" href="images/497663176_703682725367800_1093382578716552799_n.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <title>Pet Love Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/497663176_703682725367800_1093382578716552799_n.png" type="image/x-icon">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles/general.css">
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="styles/general.css">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; }
+    .custom-navbar { background: orange; }
+    .custom-footer { background: orange; color: #212529; }
+
+    main { padding-top: 0; } /* sticky-top already handles spacing */
+
+    /* Hero */
+    .hero {
+      min-height: 70vh;
+      max-height: 80vh;
+      background-image: url('images/unnamed.webp'); /* adjust if needed */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .hero::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+    .hero-content { position: relative; z-index: 1; }
+    @keyframes fadeInPop { 0%{opacity:0; transform:scale(.96)} 100%{opacity:1; transform:scale(1)} }
+    .hero-content h1 { animation: fadeInPop .9s ease-out both; }
+    .hero-content p  { animation: fadeInPop .9s ease-out both .15s; }
+
+    /* Keep auth buttons compact and consistent */
+    .auth-buttons .btn { --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .6rem; }
+  </style>
 </head>
 <body>
 
-   <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
+  <!-- NAVBAR (matches Contact page style) -->
+  <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
-            <img src="images/497663176_703682725367800_1093382578716552799_n.png" 
-                 alt="Logo" width="50" height="50" class="me-2">
-            Pet Love Studio
-        </a>
-        
-        <a  style="margin-left: 15px;" class="navbar-brand d-flex align-items-center" href="https://www.instagram.com/pet_love_studio/" target="_blank">
-          <p class="navbar-brand d-flex align-items-center" style="margin-top: 2px; font-size: 18px;">Follow us on</p>
-          <img style="margin-left: 10px;" src="images/instagram-new--v2.png" 
-                 alt="insta" width="35" height="35" class="me-2">
-        </a>
-                <a class="navbar-brand d-flex align-items-center" href="https://www.facebook.com/profile.php?id=61576540510268" target="_blank">
-                    
-          <img style="margin-bottom: 1px;" src="images/Facebook-icon-white-PNG-large-size.png" 
-                 alt="fb" width="27" height="27" class="me-2">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="grooming.html">Book Grooming Appointment</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+      <a style="font-size: 15px;" class="navbar-brand d-flex align-items-center" href="index.html">
+        <img  src="images/497663176_703682725367800_1093382578716552799_n.png" alt="Logo" width="50" height="50" class="me-2">
+        Pet Love Studio
+      </a>
 
-    <!-- Hero Section -->
-    <section class="hero d-flex align-items-center justify-content-center text-center">
-        <div class="hero-content">
-            <h1>Welcome to Pet Love Studio!</h1>
-            <p>Your trusted pet shop & grooming service in Mosfiloti</p>
-        </div>
+      <!-- Social icons (same as Contact page) -->
+      <a style class="navbar-brand d-flex align-items-center" href="https://www.instagram.com/pet_love_studio/" target="_blank" rel="noopener">
+        <img  src="images/instagram-new--v2.png" alt="insta" width="25" height="25" class="me-2">
+      </a>
+      <a class="navbar-brand d-flex align-items-center" href="https://www.facebook.com/profile.php?id=61576540510268" target="_blank" rel="noopener">
+        <img style="margin-bottom: 1px;" src="images/Facebook-icon-white-PNG-large-size.png" alt="fb" width="21" height="21" class="me-2">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Links (right aligned, same order as Contact) -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="grooming.html">Book Grooming Appointment</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+
+        <!-- Auth buttons / account (kept minimal, same color family) -->
+        <ul class="navbar-nav auth-buttons d-flex flex-row gap-2 ms-lg-3 mt-2 mt-lg-0">
+          <!-- Logged OUT -->
+          <li class="nav-item" id="btn-show-login">
+            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button>
+          </li>
+          <li class="nav-item" id="btn-show-signup">
+            <button class="btn btn-light text-dark btn-sm" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button>
+          </li>
+
+          <!-- Logged IN -->
+          <li class="nav-item dropdown d-none" id="user-dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user-email">Account</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="my-account.html">My Account</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" id="btn-logout">Log out</button></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <!-- Admin Panel link (hidden by default) -->
+    <div id="admin-section" class="container my-5 d-none">
+      <div class="alert alert-dark">
+        <h4 class="alert-heading">🔑 Admin Access</h4>
+        <p>You are logged in as the administrator.</p>
+        <a href="admin.html" class="btn btn-dark">Go to Admin Dashboard</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Pet Love Studio!</h1>
+        <p>Your trusted pet shop & grooming service in Mosfiloti</p>
+        <a class="btn btn-light btn-lg mt-2" href="grooming.html">Book Grooming</a>
+      </div>
     </section>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Footer -->
-<!-- Footer -->
-<footer class="custom-footer text-center py-3">
-  Made and designed by  
-  <a style="text-decoration: underline;" href="https://www.linkedin.com/in/constantinos-koumas-5b8752362/" target="_blank">
-    KoumasWeb
-  </a>
-   © 2025
-</footer>
+    <section class="container my-5 text-center">
+      <h2>Our Mission</h2>
+      <p class="lead">Providing love and care for your furry friends with quality products and professional grooming services.</p>
+      <div id="auth-alert" class="alert d-none" role="alert"></div>
+    </section>
+  </main>
 
+  <!-- FOOTER (same family) -->
+  <footer class="custom-footer text-center py-3">
+    Made and designed by TEAM 10 - UCY - EPL343 - WINTER SEMESTER 2025 ©
+  </footer>
+
+  <!-- ===== Modals (Auth) ===== -->
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="login-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Log in</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="login-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+          <div class="form-text mt-2">Forgot password? <a href="#" id="link-reset">Reset here</a></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Log in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="signup-form">
+        <div class="modal-header">
+          <h5 class="modal-title">Create account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" class="form-control mb-3" id="signup-email" placeholder="Email" required>
+          <input type="password" class="form-control" id="signup-password" placeholder="Password (min 6 chars)" minlength="6" required>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" type="submit">Sign up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase Auth + Firestore (for full name) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3Tcp0-6bKPCaLLCA-A9yiYDpWiZa_9wU",
+      authDomain: "pet-love-studio.firebaseapp.com",
+      projectId: "pet-love-studio",
+      storageBucket: "pet-love-studio.firebasestorage.app",
+      messagingSenderId: "719122537267",
+      appId: "1:719122537267:web:f47830925e1ea970e17c46"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // UI alert helper
+    const alertBox = document.getElementById('auth-alert');
+    function showAlert(msg, type='success') {
+      alertBox.className = `alert alert-${type}`;
+      alertBox.textContent = msg;
+      alertBox.classList.remove('d-none');
+      setTimeout(() => alertBox.classList.add('d-none'), 3000);
+    }
+
+    // Navbar elements
+    const btnShowLogin  = document.getElementById('btn-show-login');
+    const btnShowSignup = document.getElementById('btn-show-signup');
+    const userDropdown  = document.getElementById('user-dropdown');
+    const userEmailLink = document.getElementById('user-email');
+
+    // Admin callout
+    const OWNER_EMAIL = "marikonkouma@gmail.com";
+    const adminSection = document.getElementById("admin-section");
+
+    // Helper: set dropdown label to Full Name or fallback to email
+    function setNavbarAccountLabel(profile, fallbackEmail) {
+      const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim();
+      userEmailLink.textContent = fullName || fallbackEmail || "Account";
+    }
+
+    // Auth state → toggle UI + load profile for name
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Show account UI
+        btnShowLogin.classList.add('d-none');
+        btnShowSignup.classList.add('d-none');
+        userDropdown.classList.remove('d-none');
+
+        // Temporary label while loading profile
+        setNavbarAccountLabel({}, user.email);
+
+        // Admin banner
+        if (user.email === OWNER_EMAIL) {
+          adminSection.classList.remove("d-none");
+        } else {
+          adminSection.classList.add("d-none");
+        }
+
+        // Load profile from Firestore and set Full Name
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          const data = snap.exists() ? snap.data() : {};
+          const profile = data.profile || {};
+          setNavbarAccountLabel(profile, user.email);
+        } catch (err) {
+          // fallback: just keep email
+          setNavbarAccountLabel({}, user.email);
+          console.error(err);
+        }
+      } else {
+        // Logged out
+        btnShowLogin.classList.remove('d-none');
+        btnShowSignup.classList.remove('d-none');
+        userDropdown.classList.add('d-none');
+        adminSection.classList.add("d-none");
+      }
+    });
+
+    // Sign up
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        showAlert('Account created! You are now logged in.');
+        bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+      } catch (err) {
+        showAlert(err.message, 'danger');
+      }
+    });
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showAlert('Welcome back!');
+        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+      } catch (err) {
+        showAlert(err.message, 'danger');
+      }
+    });
+
+    // Password reset
+    document.getElementById('link-reset').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { showAlert('Enter your email in the login form first.', 'warning'); return; }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showAlert('Password reset email sent.');
+      } catch (err) {
+        showAlert(err.message, 'danger');
+      }
+    });
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        showAlert('Logged out.');
+      } catch (err) {
+        showAlert(err.message, 'danger');
+      }
+    });
+  </script>
 </body>
 </html>
-
